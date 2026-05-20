@@ -1,0 +1,17 @@
+
+*.py
+*.pyc
+__pycache__/
+venv/
+.env
+Vigil_env/
+
+*.db
+*.sqlite3
+*.csv
+*.yaml
+*.txt
+*.pdf
+
+
+anmol.jpg

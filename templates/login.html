@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>V.I.G.I.L. | LOGIN</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root { --accent: #818cf8; --error: #ff4b2b; --bg: #000000; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: var(--bg); font-family: 'Plus Jakarta Sans', sans-serif; cursor: none; }
+        canvas { position: absolute; top: 0; left: 0; z-index: 1; filter: contrast(1.2) brightness(0.4); }
+        #cursor { width: 8px; height: 8px; background: #fff; border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; box-shadow: 0 0 15px var(--accent); }
+        #splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 1000; display: flex; flex-direction: column; justify-content: center; align-items: center; perspective: 1200px; }
+        .neural-decode { font-size: 18px; color: #fff; letter-spacing: 12px; font-weight: 200; text-transform: uppercase; text-align: center; line-height: 1.8; position: absolute; opacity: 0; animation: decodeSequence 4s forwards; }
+        .neural-decode span { color: var(--accent); font-weight: 800; }
+        @keyframes decodeSequence { 0% { opacity: 0; filter: blur(20px); } 20%, 80% { opacity: 1; filter: blur(0px); } 100% { opacity: 0; filter: blur(30px); } }
+        .eight-d-container { display: flex; gap: 25px; margin-bottom: 30px; }
+        .letter { font-size: 140px; font-weight: 800; color: #fff; opacity: 0; transform: translateZ(600px) scale(2.5); filter: blur(30px); animation: slam 0.7s forwards cubic-bezier(0.17, 0.84, 0.44, 1); }
+        @keyframes slam { to { opacity: 1; transform: translateZ(0) scale(1); filter: blur(0px); } }
+        .explode-tag { font-size: 13px; color: var(--accent); letter-spacing: 25px; font-weight: 800; text-transform: uppercase; opacity: 0; filter: blur(20px); animation: explodeAssemble 1.5s 7s forwards; }
+        @keyframes explodeAssemble { 0% { opacity: 0; letter-spacing: 50px; transform: translateY(30px); } 100% { opacity: 1; letter-spacing: 5px; transform: translateY(0); filter: blur(0px); } }
+        .super-viewport { position: relative; z-index: 10; height: 100vh; display: flex; justify-content: center; align-items: center; opacity: 0; transition: opacity 2s ease; pointer-events: none; }
+        .bento-module { background: rgba(255, 255, 255, 0.01); backdrop-filter: blur(120px); border: 1px solid rgba(255, 255, 255, 0.08); padding: 80px 60px; border-radius: 80px; width: 480px; text-align: center; transition: 0.4s; }
+        .error-shake { animation: shake 0.4s both; border-color: var(--error) !important; }
+        @keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 30%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }
+        .hero-title { font-size: 72px; font-weight: 800; letter-spacing: -5px; margin-bottom: 50px; color: #fff; }
+        .hero-title span { color: var(--accent); }
+        input { width: 100%; padding: 26px 35px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 40px; color: #fff; font-size: 16px; outline: none; margin-bottom: 20px; box-sizing: border-box; }
+        .master-btn { width: 100%; padding: 28px; background: #fff; color: #000; border: none; border-radius: 40px; font-family: 'Space Grotesk', sans-serif; font-weight: 800; letter-spacing: 4px; cursor: pointer; text-transform: uppercase; }
+        #error-msg { color: var(--error); font-size: 11px; margin-top: 20px; font-weight: 800; letter-spacing: 2px; min-height: 15px; }
+    </style>
+</head>
+<body onmousemove="moveCursor(event)">
+    <div id="cursor"></div>
+    <div id="splash">
+        <div class="neural-decode"><span>V</span>igilant <span>I</span>nfrastructure &<br><span>G</span>atekeeping <span>I</span>ntelligence <span>L</span>ayer</div>
+        <div class="eight-d-container">
+            <div class="letter" style="animation-delay: 4.2s;">V</div>
+            <div class="letter" style="animation-delay: 4.6s;">I</div>
+            <div class="letter" style="animation-delay: 5.0s;">G</div>
+            <div class="letter" style="animation-delay: 5.4s;">I</div>
+            <div class="letter" style="animation-delay: 5.8s;">L</div>
+        </div>
+        <div class="explode-tag">Vigil doesn't just manage hardware, it understands it</div>
+    </div>
+    <div class="super-viewport" id="mainContent">
+        <div class="bento-module">
+            <div class="hero-title">VIGIL<span>AI</span></div>
+            <form id="loginForm">
+                <input type="text" name="username" placeholder="Operator Identity" required>
+                <input type="password" name="password" placeholder="Passkey" required>
+                <button type="submit" class="master-btn">Authorize</button>
+                <div id="error-msg"></div>
+            </form>
+        </div>
+    </div>
+    <script>
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('splash').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('splash').style.display = 'none';
+                    document.getElementById('mainContent').style.opacity = '1';
+                    document.getElementById('mainContent').style.pointerEvents = 'auto';
+                }, 1000);
+            }, 9500);
+        });
+        const form = document.getElementById('loginForm');
+        const bento = document.querySelector('.bento-module');
+        const errorDiv = document.getElementById('error-msg');
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const response = await fetch('/login', { method: 'POST', body: formData });
+            const data = await response.json();
+            if (data.success) { window.location.href = "/dashboard"; }
+            else { errorDiv.innerText = "ACCESS_DENIED: INVALID_SIGNATURE"; bento.classList.add('error-shake'); setTimeout(() => bento.classList.remove('error-shake'), 500); }
+        };
+        function moveCursor(e) { const c = document.getElementById('cursor'); c.style.left = e.clientX + 'px'; c.style.top = e.clientY + 'px'; }
+        let scene, camera, renderer, particles;
+        function init() {
+            scene = new THREE.Scene(); camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+            const geo = new THREE.BufferGeometry(); const pos = new Float32Array(20000 * 3);
+            for(let i=0; i<20000 * 3; i++) pos[i] = (Math.random() - 0.5) * 15;
+            geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+            const mat = new THREE.PointsMaterial({ color: 0x818cf8, size: 0.012, transparent: true, opacity: 0.4 });
+            particles = new THREE.Points(geo, mat); scene.add(particles); camera.position.z = 4;
+        }
+        function render() { requestAnimationFrame(render); particles.rotation.y += 0.001; renderer.render(scene, camera); }
+        init(); render();
+    </script>
+</body>
+</html>
